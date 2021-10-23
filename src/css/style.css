@@ -55,10 +55,10 @@
   background: rgba(255, 255, 255, 30%);
 }
 
-.stats-item {
+/* .stats-item {
   /* display: flex; */
-  /* width: 25px; */
-}
+/* width: 25px; */
+/* } */
 
 .stats-item:not(:last-child) {
   margin-right: 20px;
