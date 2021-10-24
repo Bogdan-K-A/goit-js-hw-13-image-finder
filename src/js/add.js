@@ -1,17 +1,13 @@
 import photoCardTpl from '../templates/photo-card.hbs';
-import debounce from 'lodash.debounce';
 import PexelApiService from './apiService';
 import LoadMoreBtn from './load-more-btn';
 
 const searchForm = document.querySelector('.search-form');
 const galery = document.querySelector('.galery');
-// const loadMoreBtn = document.querySelector('[data-action="load-more"]');
-
 const loadMoreBtn = new LoadMoreBtn({
   selector: '[data-action="load-more"]',
   hidden: true,
 });
-
 const pexelApiService = new PexelApiService();
 
 searchForm.addEventListener('submit', onSearch);
