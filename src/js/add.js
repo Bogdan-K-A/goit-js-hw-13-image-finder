@@ -1,29 +1,49 @@
 import photoCardTpl from '../templates/photo-card.hbs';
+import debounce from 'lodash.debounce';
+import PexelApiService from './apiService';
 
-const API_KEY = '23996907-65b7baf3ba7389d44636c5d9e';
-const query = 'sun';
-const numPage = 1;
-const BASE_URL = `https://pixabay.com/api/`;
-const params = `?image_type=photo&orientation=horizontal&q=${query}&page=${numPage}&per_page=12&key=${API_KEY}`;
-const URL = BASE_URL + params;
+const searchForm = document.querySelector('.search-form');
+const galery = document.querySelector('.galery');
+const loadMoreBtn = document.querySelector('[data-action="load-more"]');
 
-const gallery = document.querySelector('.galery');
-// export default
-// function fetchPhotos(searchQuery) {
-fetch(URL)
-  .then(response => response.json())
-  .then(data => {
-    // console.log(data);
-    // const markup = photoCardTpl(data);
-    // console.log(markup);
-    gallery.innerHTML = photoCardTpl(data.hits);
-  })
-  .catch(
-    err => err,
-    // console.log(err);
-  );
+const pexelApiService = new PexelApiService();
+// console.log(searchForm);
+
+searchForm.addEventListener('submit', onSearch);
+loadMoreBtn.addEventListener('click', onLoadMore);
+
+function onSearch(e) {
+  e.preventDefault();
+
+  clearGaleryList();
+  pexelApiService.query = e.currentTarget.elements.query.value;
+
+  if (pexelApiService.query === '') {
+    return alert('Введите запрос');
+  }
+
+  pexelApiService.resetPage();
+  pexelApiService.fetchHits().then(renderPhotoList);
+}
+
+function onLoadMore() {
+  pexelApiService.fetchHits().then(renderPhotoList);
+}
+
+/* ----------------------------- рендер карточек ---------------------------- */
+function renderPhotoList(hits) {
+  const markup = photoCardTpl(hits);
+  galery.insertAdjacentHTML('beforeend', markup);
+}
+/* ----------------------------- очистка инпута ----------------------------- */
+function clearGaleryList() {
+  galery.innerHTML = '';
+}
+
+// function clearInput() {
+//   searchForm.value = '';
 // }
-// ====================
+
 // const element = document.getElementById('.my-element-selector');
 // element.scrollIntoView({
 //   behavior: 'smooth',
