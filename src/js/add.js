@@ -1,13 +1,13 @@
 import photoCardTpl from '../templates/photo-card.hbs';
 
 const API_KEY = '23996907-65b7baf3ba7389d44636c5d9e';
-const query = 'car';
+const query = 'sun';
 const numPage = 1;
 const BASE_URL = `https://pixabay.com/api/`;
-const options = `?image_type=photo&orientation=horizontal&q=${query}&page=${numPage}&per_page=12&key=${API_KEY}`;
-const URL = BASE_URL + options;
+const params = `?image_type=photo&orientation=horizontal&q=${query}&page=${numPage}&per_page=12&key=${API_KEY}`;
+const URL = BASE_URL + params;
 
-const gallery = document.querySelector('.gallery');
+const gallery = document.querySelector('.galery');
 // export default
 // function fetchPhotos(searchQuery) {
 fetch(URL)
