@@ -1,33 +1,44 @@
 import photoCardTpl from '../templates/photo-card.hbs';
 import debounce from 'lodash.debounce';
 import PexelApiService from './apiService';
+import LoadMoreBtn from './load-more-btn';
 
 const searchForm = document.querySelector('.search-form');
 const galery = document.querySelector('.galery');
-const loadMoreBtn = document.querySelector('[data-action="load-more"]');
+// const loadMoreBtn = document.querySelector('[data-action="load-more"]');
+
+const loadMoreBtn = new LoadMoreBtn({
+  selector: '[data-action="load-more"]',
+  hidden: true,
+});
 
 const pexelApiService = new PexelApiService();
-// console.log(searchForm);
 
 searchForm.addEventListener('submit', onSearch);
-loadMoreBtn.addEventListener('click', onLoadMore);
+loadMoreBtn.refs.button.addEventListener('click', featchPhotos);
 
 function onSearch(e) {
   e.preventDefault();
 
-  clearGaleryList();
   pexelApiService.query = e.currentTarget.elements.query.value;
 
   if (pexelApiService.query === '') {
     return alert('Введите запрос');
   }
 
+  clearInput();
+  clearGaleryList();
+  loadMoreBtn.show();
   pexelApiService.resetPage();
-  pexelApiService.fetchHits().then(renderPhotoList);
+  featchPhotos();
 }
 
-function onLoadMore() {
-  pexelApiService.fetchHits().then(renderPhotoList);
+function featchPhotos() {
+  loadMoreBtn.disable();
+  pexelApiService.fetchHits().then(hits => {
+    renderPhotoList(hits);
+    loadMoreBtn.enable();
+  });
 }
 
 /* ----------------------------- рендер карточек ---------------------------- */
@@ -35,14 +46,14 @@ function renderPhotoList(hits) {
   const markup = photoCardTpl(hits);
   galery.insertAdjacentHTML('beforeend', markup);
 }
-/* ----------------------------- очистка инпута ----------------------------- */
+/* ----------------------------- очистка полей ----------------------------- */
 function clearGaleryList() {
   galery.innerHTML = '';
 }
 
-// function clearInput() {
-//   searchForm.value = '';
-// }
+function clearInput() {
+  searchForm[0].value = '';
+}
 
 // const element = document.getElementById('.my-element-selector');
 // element.scrollIntoView({
