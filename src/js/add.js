@@ -31,10 +31,15 @@ function onSearch(e) {
 
 function featchPhotos() {
   loadMoreBtn.disable();
-  pexelApiService.fetchHits().then(hits => {
-    renderPhotoList(hits);
-    loadMoreBtn.enable();
-  });
+  pexelApiService
+    .fetchHits()
+    .then(hits => {
+      renderPhotoList(hits);
+      loadMoreBtn.enable();
+    })
+    .cetch(err => {
+      alert(err);
+    });
 }
 
 /* ----------------------------- рендер карточек ---------------------------- */
