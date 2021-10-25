@@ -37,7 +37,7 @@ function featchPhotos() {
       renderPhotoList(hits);
       loadMoreBtn.enable();
     })
-    .cetch(err => {
+    .catch(err => {
       alert(err);
     });
 }
